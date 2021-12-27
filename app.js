@@ -6,6 +6,8 @@ const hpp = require('hpp');
 const compression = require('compression');
 
 const reportRouter = require('./routes/reportRoutes');
+const AppError = require('./utils/appError');
+const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 
@@ -44,9 +46,9 @@ app.use(compression());
 // 3) ROUTES
 app.use('/reports', reportRouter);
 
-/* app.all('*', (req, res, next) => {
+app.all('*', (req, res, next) => {
 	next(new AppError(`Can not find ${req.originalUrl} on this server!`, 404));
 });
-app.use(globalErrorHandler); */
+app.use(globalErrorHandler);
 
 module.exports = app;
