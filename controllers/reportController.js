@@ -17,6 +17,7 @@ exports.createReport = catchAsync(async (req,res, next) => {
     //console.log(report);
     if(!report) {
         if(req.body.priceUnit) req.body.priceUnit = "kg";
+        if(req.body.timestamp) delete req.body.timestamp;
         req.body.minPrice = req.body.minPrice / req.body.convFctr;
         req.body.maxPrice = req.body.maxPrice / req.body.convFctr;
         req.body.convFctr = 100;
@@ -32,8 +33,18 @@ exports.createReport = catchAsync(async (req,res, next) => {
         report.minPrice = ((req.body.minPrice / req.body.convFctr) + report.minPrice) / 2;
         report.maxPrice = ((req.body.maxPrice / req.body.convFctr) + report.maxPrice) / 2;
         if(!report.userID.includes(req.body.userID))
-            report.userID.push(req.body.userID);
+            {   
+            if(typeof(req.body.userID) === "string")
+                {
+                    report.userID.push(req.body.userID);
+                }
+            }
         report.timestamp = Date.now();
+
+        if(req.body.marketName) report.marketName = req.body.marketName;
+        if(req.body.marketType) report.marketType = req.body.marketType;
+        if(req.body.cmdtyName) report.cmdtyName = req.body.cmdtyName;
+        if(req.body.priceUnit) report.priceUnit = req.body.priceUnit;
 
         const rep = await report.save();
 

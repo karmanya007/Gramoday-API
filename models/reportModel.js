@@ -1,21 +1,5 @@
 const mongoose = require('mongoose');
 
-/* 
-{
-"reportDetails": {
-"userID": "user-1",
-"marketID": "market-1",
-"marketName": "Vashi Navi Mumbai",
-"cmdtyID": "cmdty-1",
-"marketType": "Mandi",
-"cmdtyName": "Potato",
-"priceUnit": "Pack",
-"convFctr": 50,
-"minPrice": 700,
-"maxPrice": 900,
-}
-*/
-
 const reportSchema = new mongoose.Schema({
     cmdtyID : {   
         type: String,
@@ -34,15 +18,14 @@ const reportSchema = new mongoose.Schema({
     marketType : {
         type: String,
     },
-    userID: [
-        {
-            type: String,
-            required: [true, 'User ID is required'],
-        }
-    ],
+    userID: {
+        type: [String],
+        required: [true, 'User ID is required'],
+        validate: v => Array.isArray(v) && v.length > 0,
+    },
     timestamp : {
-        type: Date,
-		default: Date.now(),
+        type: Number,
+		default: Date.now()
     },
     priceUnits : {
         type : String,
